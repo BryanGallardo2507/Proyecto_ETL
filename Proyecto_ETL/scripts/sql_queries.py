@@ -14,7 +14,7 @@ ORDER BY
 '''
 
 tiempo_load = '''
-INSERT INTO DIMENSION_TIEMPO (
+INSERT INTO DIM_TIEMPO (
     TIEMPO_ID,
     MES,
     TRIMESTRE,
@@ -33,7 +33,7 @@ FROM DBO.EMPLOYEE;
 '''
 
 empleados_load = '''
-INSERT INTO DIMENSION_EMPLEADO (
+INSERT INTO DIM_EMPLEADO (
     EMPLEADOID,
     NOMBRE,
     APELLIDO
@@ -54,7 +54,7 @@ FROM DBO.CUSTOMER;
 '''
 
 cliente_load = '''
-INSERT INTO DIMENSION_CLIENTE (
+INSERT INTO DIM_CLIENTE (
     CLIENTEID,
     NOMBRE,
     APELLIDO,
@@ -77,7 +77,7 @@ FROM DBO.TRACK;
 '''
 
 pistas_load = '''
-INSERT INTO DIMENSION_PISTAS (
+INSERT INTO DIM_PISTA (
     PISTAID,
     NOMBRE,
     GENEROID,
@@ -96,7 +96,7 @@ tipo_medio_extract = '''
 '''
 
 tipo_medio_load = '''
-INSERT INTO DIMENSION_MEDIO (
+INSERT INTO DIM_MEDIO (
     MEDIOID,
     NOMBRE
 ) VALUES (?, ?)
@@ -111,7 +111,7 @@ genero_extract = '''
 '''
 
 genero_load = '''
-INSERT INTO DIMENSION_GENERO (
+INSERT INTO DIM_GENERO (
     GENEROID,
     NOMBRE
 ) VALUES (?, ?)
@@ -127,7 +127,7 @@ album_extract = '''
 '''
 
 album_load = '''
-INSERT INTO DIMENSION_ALBUM (
+INSERT INTO DIM_ALBUM (
     ALBUMID,
     TITULO,
     ARTISTAID
@@ -143,7 +143,7 @@ FROM DBO.ARTIST
 '''
 
 artista_load = '''
-INSERT INTO DIMENSION_ARTISTA (
+INSERT INTO DIM_ARTISTA (
     ARTISTAID,
     NOMBRE
 ) VALUES (?, ?)
