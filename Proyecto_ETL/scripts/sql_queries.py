@@ -1,78 +1,245 @@
+#QUERIES DE TIEMPO
 tiempo_extract = '''
 SELECT
-    DATENAME(WEEKDAY, I.INVOICEDATE) AS DAY_OF_WEEK,
-    DATENAME(MONTH, I.INVOICEDATE) AS MONTH,
-    DATEPART(QUARTER, I.INVOICEDATE) AS QUARTER,
-    YEAR(I.INVOICEDATE) AS YEAR,
-    SUM(I.TOTAL) AS TOTAL_SALES
+    CONVERT(DATE, InvoiceDate) AS TIEMPO_ID,
+    DATENAME(MONTH, I.INVOICEDATE) AS MES,
+    DATEPART(QUARTER, I.INVOICEDATE) AS TRIMESTRE,
+    YEAR(I.INVOICEDATE) AS ANIO,
+    DATENAME(WEEKDAY, I.INVOICEDATE) AS DIA_DE_SEMANA
 FROM 
-    INVOICE I
-GROUP BY
-    DATENAME(WEEKDAY, I.INVOICEDATE),
-    DATENAME(MONTH, I.INVOICEDATE),
-    DATEPART(QUARTER, I.INVOICEDATE),
-    YEAR(I.INVOICEDATE)
+    DBO.INVOICE I
 ORDER BY
-    YEAR, QUARTER, MONTH;
+    ANIO, TRIMESTRE, MES;
+
 '''
 
 tiempo_load = '''
-INSERT INTO dim_customers (
-    customer_id,
-    customer_name,
-    contact_name,
-    address,
-    city,
-    postal_code,
-    country
-) VALUES (?, ?, ?, ?, ?, ?, ?)
+INSERT INTO DIMENSION_TIEMPO (
+    TIEMPO_ID,
+    MES,
+    TRIMESTRE,
+    ANIO,
+    DIA_SEMANA
+) VALUES (?, ?, ?, ?, ?)
 '''
 
-#########################################
-empleado_extract = '''
-SELECT EMPLOYEEID, FIRST_NAME, LAST_NAME 
-FROM dbo.EMPLOYEE
+#QUERIES DE EMPLEADOS
+empleados_extract = '''
+SELECT 
+    EMPLOYEEID,
+    FIRSTNAME,
+    LASTNAME
+FROM DBO.EMPLOYEE;
 '''
 
-tiempo_load = '''
-INSERT INTO dim_customers (
-    customer_id,
-    customer_name,
-    contact_name,
-    address,
-    city,
-    postal_code,
-    country
-) VALUES (?, ?, ?, ?, ?, ?, ?)
+empleados_load = '''
+INSERT INTO DIMENSION_EMPLEADO (
+    EMPLEADOID,
+    NOMBRE,
+    APELLIDO
+) VALUES (?, ?, ?)
 '''
 
-#########################################
+#QUERIES DE CLIENTES
 cliente_extract = '''
-SELECT CUSTOMERID, FIRST_NAME, LAST_NAME 
-FROM dbo.EMPLOYEE
+SELECT 
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNAME,
+    ADDRESS,
+    CITY,
+    STATE,
+    COUNTRY
+FROM DBO.CUSTOMER;
 '''
 
-tiempo_load = '''
-INSERT INTO dim_customers (
-    customer_id,
-    customer_name,
-    contact_name,
-    address,
-    city,
-    postal_code,
-    country
+cliente_load = '''
+INSERT INTO DIMENSION_CLIENTE (
+    CLIENTEID,
+    NOMBRE,
+    APELLIDO,
+    DIRECCION,
+    CIUDAD,
+    ESTADO,
+    PAIS
 ) VALUES (?, ?, ?, ?, ?, ?, ?)
+'''
+
+#QUERIES DE PISTAS
+pistas_extract = '''
+SELECT 
+    TRACKID,
+    NAME,
+    GENREID,
+    MEDIATYPEID,
+    ALBUMID
+FROM DBO.TRACK;
+'''
+
+pistas_load = '''
+INSERT INTO DIMENSION_PISTAS (
+    PISTAID,
+    NOMBRE,
+    GENEROID,
+    MEDIOID,
+    ALBUMID
+) VALUES (?, ?, ?, ?, ?)
+'''
+
+
+#QUERIES DE TIPO MEDIO
+tipo_medio_extract = '''
+    SELECT 
+        MEDIATYPEID,
+        NAME
+    FROM DBO.MEDIATYPE;
+'''
+
+tipo_medio_load = '''
+INSERT INTO DIMENSION_PISTAS (
+    MEDIOID,
+    NOMBRE
+) VALUES (?, ?)
+'''
+
+#QUERIES DE GENERO
+genero_extract = '''
+    SELECT 
+        GENREID,
+        NAME
+    FROM DBO.MEDIATYPE;
+'''
+
+genero_load = '''
+INSERT INTO DIMENSION_GENERO (
+    GENEROID,
+    NOMBRE
+) VALUES (?, ?)
+'''
+
+#QUERIES DE ALBUM
+album_extract = '''
+    SELECT 
+        ALBUMID,
+        TITLE,
+        ARTISTID
+    FROM DBO.ALBUM;
+'''
+
+album_load = '''
+INSERT INTO DIMENSION_ALBUM (
+    ALBUMID,
+    TITULO,
+    ARTISTAID
+) VALUES (?, ?, ?)
+'''
+
+#QUERIES DE ARTISTAS
+artista_extract = '''
+SELECT
+    ARTISTID,
+    NAME
+FROM DBO.ARTIST 
+'''
+
+artista_load = '''
+INSERT INTO DIMENSION_ARTISTA (
+    ARTISTAID,
+    NOMBRE
+) VALUES (?, ?)
+'''
+
+#QUERIES DE TABLA DE HECHOS
+hechos_extract = '''
+SELECT 	
+	CONVERT(DATE, B.INVOICEDATE) AS TIEMPO_ID,
+	C.CUSTOMERID,
+	D.TRACKID,
+	E.EMPLOYEEID,
+	F.MEDIATYPEID,
+	G.GENREID,
+	H.ALBUMID,
+	I.ARTISTID,
+	SUM(A.UNITPRICE*A.QUANTITY) AS VENTAS
+FROM INVOICELINE A
+INNER JOIN INVOICE B
+ON A.INVOICEID=B.INVOICEID
+INNER JOIN CUSTOMER C
+ON B.CUSTOMERID=C.CUSTOMERID
+INNER JOIN TRACK D
+ON A.TRACKID=D.TRACKID
+INNER JOIN EMPLOYEE E
+ON C.[SupportRepId]=E.EmployeeId
+INNER JOIN MEDIATYPE F
+ON D.MEDIATYPEID=F.MEDIATYPEID
+INNER JOIN GENRE G
+ON D.GENREID=G.GENREID
+INNER JOIN ALBUM H
+ON D.ALBUMID=H.ALBUMID
+INNER JOIN ARTIST I
+ON H.ARTISTID=I.ARTISTID
+
+GROUP BY A.INVOICELINEID,
+	CONVERT(DATE, B.INVOICEDATE),
+	C.CUSTOMERID,
+	D.TRACKID,
+	E.EMPLOYEEID,
+	F.MEDIATYPEID,
+	G.GENREID,
+	H.ALBUMID,
+	I.ARTISTID
+;
+'''
+
+hechos_load = '''
+INSERT INTO DIMENSION_ARTISTA (
+    TIEMPO_ID,
+    EMPLEADOID,
+    CLIENTEID,
+    PISTAID,
+    MEDIOID,
+    GENEROID,
+    ALBUMID,
+    ARTISTAID,
+    VENTAS
+) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)
 '''
 
 # SQL Query Class
 class SqlQuery:
-    def _init_(self, extract_query, load_query):
+    def __init__(self, extract_query, load_query):
+>>>>>>> 682fd32e57bbf95d7a8cf12bfbea0204b93e1dd7
         self.extract_query = extract_query
         self.load_query = load_query
 
 # Create instances for SqlQuery class
+<<<<<<< HEAD
 customers_query = SqlQuery(customers_extract, customers_load)
 orders_query = SqlQuery(orders_extract, orders_load)
 
 # Store as list for iteration
 sqlserver_queries = [customers_query,orders_query]
+=======
+tiempo_query = SqlQuery(tiempo_extract, tiempo_load)
+empleados_query = SqlQuery(empleados_extract, empleados_load)
+cliente_query = SqlQuery(cliente_extract, cliente_load)
+pistas_query = SqlQuery(pistas_extract, pistas_load)
+tipo_medio_query = SqlQuery(tipo_medio_extract, tipo_medio_load)
+genero_query = SqlQuery(genero_extract, genero_load)
+album_query = SqlQuery(album_extract, album_load)
+artista_query = SqlQuery(artista_extract, artista_load)
+hechos_query = SqlQuery(hechos_extract, hechos_load)
+
+# Store as list for iteration
+sqlserver_queries = [
+    tiempo_query,
+    empleados_query,
+    cliente_query,
+    pistas_query,
+    tipo_medio_query,
+    genero_query,
+    album_query,
+    artista_query,
+    hechos_query
+]
+>>>>>>> 682fd32e57bbf95d7a8cf12bfbea0204b93e1dd7
