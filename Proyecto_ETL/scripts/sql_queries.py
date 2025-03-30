@@ -96,7 +96,7 @@ tipo_medio_extract = '''
 '''
 
 tipo_medio_load = '''
-INSERT INTO DIMENSION_PISTAS (
+INSERT INTO DIMENSION_MEDIO (
     MEDIOID,
     NOMBRE
 ) VALUES (?, ?)
@@ -107,7 +107,7 @@ genero_extract = '''
     SELECT 
         GENREID,
         NAME
-    FROM DBO.MEDIATYPE;
+    FROM DBO.GENRE;
 '''
 
 genero_load = '''
@@ -223,13 +223,13 @@ hechos_query = SqlQuery(hechos_extract, hechos_load)
 
 # Store as list for iteration
 sqlserver_queries = [
-    tiempo_query,
+    tiempo_query,  
+    artista_query, 
+    album_query,
+    genero_query,
+    tipo_medio_query,
+    pistas_query,
     empleados_query,
     cliente_query,
-    pistas_query,
-    tipo_medio_query,
-    genero_query,
-    album_query,
-    artista_query,
-    hechos_query
+    hechos_query       
 ]
