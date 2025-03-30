@@ -208,18 +208,10 @@ INSERT INTO DIMENSION_ARTISTA (
 # SQL Query Class
 class SqlQuery:
     def __init__(self, extract_query, load_query):
->>>>>>> 682fd32e57bbf95d7a8cf12bfbea0204b93e1dd7
         self.extract_query = extract_query
         self.load_query = load_query
 
 # Create instances for SqlQuery class
-<<<<<<< HEAD
-customers_query = SqlQuery(customers_extract, customers_load)
-orders_query = SqlQuery(orders_extract, orders_load)
-
-# Store as list for iteration
-sqlserver_queries = [customers_query,orders_query]
-=======
 tiempo_query = SqlQuery(tiempo_extract, tiempo_load)
 empleados_query = SqlQuery(empleados_extract, empleados_load)
 cliente_query = SqlQuery(cliente_extract, cliente_load)
@@ -242,4 +234,3 @@ sqlserver_queries = [
     artista_query,
     hechos_query
 ]
->>>>>>> 682fd32e57bbf95d7a8cf12bfbea0204b93e1dd7
