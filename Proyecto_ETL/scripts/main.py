@@ -1,5 +1,6 @@
 import pyodbc
 import logging
+from sql_queries import sqlserver_queries
 
 # Configurar logs
 logging.basicConfig(filename='etl.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
