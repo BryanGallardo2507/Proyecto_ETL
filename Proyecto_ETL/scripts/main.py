@@ -1,36 +1,24 @@
 import pyodbc
-import logging
+from etl import etl_process
+from db_credentials import datawarehouse_name, source_db_config, target_db_config
+from sql_queries import sqlserver_queries  # Asegúrate de que tienes las consultas definidas
 
-# Configurar logs
-logging.basicConfig(filename='etl.log', level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
-
-# Conexión a SQL Server
-conn = pyodbc.connect("DRIVER={SQL Server};SERVER=tu_servidor;DATABASE=tu_base;UID=tu_usuario;PWD=tu_password")
-cursor = conn.cursor()
-
-def ejecutar_etl(query_obj):
-    """ Ejecuta extracción y carga de datos en SQL Server """
+def main():
+    """ Ejecuta el proceso ETL para cargar los datos en la base de datos DW_CHINOOK """
     try:
-        cursor.execute(query_obj.extract_query)
-        data = cursor.fetchall()
-
-        if not data:
-            logging.warning(f"No hay datos para cargar en {query_obj.load_query}")
-            return
-
-        cursor.executemany(query_obj.load_query, data)
-        conn.commit()
-        logging.info(f"{len(data)} registros cargados en {query_obj.load_query}")
-
+        # Conexión a la base de datos de destino (DW_CHINOOK)
+        target_cnx = pyodbc.connect(**target_db_config)
+        print("Conectado a la base de datos de destino (DW_CHINOOK)")
     except Exception as e:
-        logging.error(f"Error en {query_obj.load_query}: {str(e)}")
-        conn.rollback()
+        print(f"Error al conectar a la base de datos de destino: {e}")
+        return
 
-# Ejecutar ETL automáticamente para todas las tablas
-for query in sqlserver_queries:
-    ejecutar_etl(query)
+    # Ejecutar el proceso ETL con las consultas definidas
+    etl_process(sqlserver_queries, target_cnx, source_db_config)
 
-cursor.close()
-conn.close()
-logging.info("Proceso ETL completado")
+    # Cerrar la conexión de destino
+    target_cnx.close()
+    print("Proceso ETL completado.")
 
+if __name__ == "__main__":
+    main()
