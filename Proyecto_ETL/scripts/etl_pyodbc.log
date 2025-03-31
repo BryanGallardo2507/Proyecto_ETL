@@ -1,0 +1,210 @@
+2025-03-30 21:28:27,847 - INFO - Iniciando proceso ETL con pyodbc...
+2025-03-30 21:28:27,847 - INFO - Procesando: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:28:27,856 - INFO - Extraï¿½dos 354 registros de: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:28:28,026 - INFO - Cargados 354 registros
+2025-03-30 21:28:28,026 - INFO - Procesando: 
+SELECT
+    ARTISTID,
+    NAME
+FROM DBO.ARTIST 
+...
+2025-03-30 21:28:28,028 - INFO - Extraï¿½dos 275 registros de: 
+SELECT
+    ARTISTID,
+    NAME
+FROM DBO.ARTIST 
+...
+2025-03-30 21:28:28,166 - INFO - Cargados 275 registros
+2025-03-30 21:28:28,166 - INFO - Procesando: 
+    SELECT 
+        ALBUMID,
+        TITLE,
+     ...
+2025-03-30 21:28:28,168 - INFO - Extraï¿½dos 347 registros de: 
+    SELECT 
+        ALBUMID,
+        TITLE,
+     ...
+2025-03-30 21:28:28,364 - INFO - Cargados 347 registros
+2025-03-30 21:28:28,364 - INFO - Procesando: 
+    SELECT 
+        GENREID,
+        NAME
+    FRO...
+2025-03-30 21:28:28,366 - INFO - Extraï¿½dos 25 registros de: 
+    SELECT 
+        GENREID,
+        NAME
+    FRO...
+2025-03-30 21:28:28,383 - INFO - Cargados 25 registros
+2025-03-30 21:28:28,383 - INFO - Procesando: 
+    SELECT 
+        MEDIATYPEID,
+        NAME
+   ...
+2025-03-30 21:28:28,384 - INFO - Extraï¿½dos 5 registros de: 
+    SELECT 
+        MEDIATYPEID,
+        NAME
+   ...
+2025-03-30 21:28:28,389 - INFO - Cargados 5 registros
+2025-03-30 21:28:28,389 - INFO - Procesando: 
+SELECT 
+    TRACKID,
+    NAME,
+    GENREID,
+    M...
+2025-03-30 21:28:28,398 - INFO - Extraï¿½dos 3503 registros de: 
+SELECT 
+    TRACKID,
+    NAME,
+    GENREID,
+    M...
+2025-03-30 21:28:30,843 - INFO - Cargados 3503 registros
+2025-03-30 21:28:30,843 - INFO - Procesando: 
+SELECT 
+    EMPLOYEEID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:28:30,844 - INFO - Extraï¿½dos 8 registros de: 
+SELECT 
+    EMPLOYEEID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:28:30,852 - INFO - Cargados 8 registros
+2025-03-30 21:28:30,852 - INFO - Procesando: 
+SELECT 
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:28:30,853 - INFO - Extraï¿½dos 59 registros de: 
+SELECT 
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:28:30,916 - INFO - Cargados 59 registros
+2025-03-30 21:28:30,917 - INFO - Procesando: 
+SELECT 	
+	CONVERT(DATE, B.INVOICEDATE) AS TIEMPO_...
+2025-03-30 21:28:53,579 - INFO - Extraï¿½dos 2240 registros de: 
+SELECT 	
+	CONVERT(DATE, B.INVOICEDATE) AS TIEMPO_...
+2025-03-30 21:28:54,177 - INFO - Cargados 2240 registros
+2025-03-30 21:28:54,177 - INFO - ETL completado exitosamente
+2025-03-30 21:30:24,168 - INFO - Iniciando proceso ETL con pyodbc...
+2025-03-30 21:30:24,169 - INFO - Procesando: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:30:24,175 - INFO - Extraídos 354 registros de: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:30:24,183 - ERROR - Error en ETL: ('23000', "[23000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Violation of PRIMARY KEY constraint 'PK__DIMENSIO__56569793B5D8396D'. Cannot insert duplicate key in object 'dbo.DIMENSION_TIEMPO'. The duplicate key value is (2021-02-01). (2627) (SQLExecDirectW); [23000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated. (3621)")
+2025-03-30 21:30:24,183 - ERROR - SQL: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) AS TIEMPO_ID,
+    DATENAME(MONTH, I.INVOICEDATE) AS MES,
+    DATEPART(QUARTER, I.INVOICEDATE) AS TRIMESTRE,
+    YEAR(I.INVOICEDATE) AS ANIO,
+    DATEN...
+2025-03-30 21:30:24,183 - ERROR - Error en el proceso: ('23000', "[23000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]Violation of PRIMARY KEY constraint 'PK__DIMENSIO__56569793B5D8396D'. Cannot insert duplicate key in object 'dbo.DIMENSION_TIEMPO'. The duplicate key value is (2021-02-01). (2627) (SQLExecDirectW); [23000] [Microsoft][ODBC Driver 17 for SQL Server][SQL Server]The statement has been terminated. (3621)")
+2025-03-30 21:30:53,493 - INFO - Iniciando proceso ETL con pyodbc...
+2025-03-30 21:30:53,493 - INFO - Procesando: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:30:53,493 - INFO - Extraídos 354 registros de: 
+SELECT DISTINCT  
+    CONVERT(DATE, InvoiceDate) ...
+2025-03-30 21:30:53,657 - INFO - Cargados 354 registros
+2025-03-30 21:30:53,657 - INFO - Procesando: 
+SELECT
+    ARTISTID,
+    NAME
+FROM DBO.ARTIST 
+...
+2025-03-30 21:30:53,657 - INFO - Extraídos 275 registros de: 
+SELECT
+    ARTISTID,
+    NAME
+FROM DBO.ARTIST 
+...
+2025-03-30 21:30:53,771 - INFO - Cargados 275 registros
+2025-03-30 21:30:53,771 - INFO - Procesando: 
+    SELECT 
+        ALBUMID,
+        TITLE,
+     ...
+2025-03-30 21:30:53,771 - INFO - Extraídos 347 registros de: 
+    SELECT 
+        ALBUMID,
+        TITLE,
+     ...
+2025-03-30 21:30:53,949 - INFO - Cargados 347 registros
+2025-03-30 21:30:53,949 - INFO - Procesando: 
+    SELECT 
+        GENREID,
+        NAME
+    FRO...
+2025-03-30 21:30:53,949 - INFO - Extraídos 25 registros de: 
+    SELECT 
+        GENREID,
+        NAME
+    FRO...
+2025-03-30 21:30:53,949 - INFO - Cargados 25 registros
+2025-03-30 21:30:53,949 - INFO - Procesando: 
+    SELECT 
+        MEDIATYPEID,
+        NAME
+   ...
+2025-03-30 21:30:53,949 - INFO - Extraídos 5 registros de: 
+    SELECT 
+        MEDIATYPEID,
+        NAME
+   ...
+2025-03-30 21:30:53,972 - INFO - Cargados 5 registros
+2025-03-30 21:30:53,972 - INFO - Procesando: 
+SELECT 
+    TRACKID,
+    NAME,
+    GENREID,
+    M...
+2025-03-30 21:30:53,977 - INFO - Extraídos 3503 registros de: 
+SELECT 
+    TRACKID,
+    NAME,
+    GENREID,
+    M...
+2025-03-30 21:30:56,050 - INFO - Cargados 3503 registros
+2025-03-30 21:30:56,051 - INFO - Procesando: 
+SELECT 
+    EMPLOYEEID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:30:56,053 - INFO - Extraídos 8 registros de: 
+SELECT 
+    EMPLOYEEID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:30:56,059 - INFO - Cargados 8 registros
+2025-03-30 21:30:56,059 - INFO - Procesando: 
+SELECT 
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:30:56,061 - INFO - Extraídos 59 registros de: 
+SELECT 
+    CUSTOMERID,
+    FIRSTNAME,
+    LASTNA...
+2025-03-30 21:30:56,120 - INFO - Cargados 59 registros
+2025-03-30 21:30:56,121 - INFO - Procesando: 
+SELECT 	
+	CONVERT(DATE, B.INVOICEDATE) AS TIEMPO_...
+2025-03-30 21:31:21,174 - INFO - Extraídos 2240 registros de: 
+SELECT 	
+	CONVERT(DATE, B.INVOICEDATE) AS TIEMPO_...
+2025-03-30 21:31:21,876 - INFO - Cargados 2240 registros
+2025-03-30 21:31:21,876 - INFO - ETL completado exitosamente
