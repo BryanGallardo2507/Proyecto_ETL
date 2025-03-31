@@ -50,8 +50,8 @@ if st.session_state.df is not None and st.session_state.query_run:
             ops = st.multiselect(
                 f"Operaciones para {col}",
                 options=[
-                    'lowercase', 'uppercase', 'extract_date',
-                    'extract_year', 'extract_month', 'extract_day',
+                    'lowercase', 'uppercase', 'extract_year',
+                    'extract_month_name', 'extract_trimester', 'extract_day_name',
                     'concat...'
                 ],
                 key=f"ops_{col}"

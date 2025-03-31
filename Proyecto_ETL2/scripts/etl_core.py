@@ -29,17 +29,25 @@ def apply_transformations(df, transformations):
                 df[col] = df[col].str.lower()
             elif op == 'uppercase':
                 df[col] = df[col].str.upper()
-            elif op == 'extract_date':
-                df[col] = pd.to_datetime(df[col], errors='coerce').dt.date
             elif op == 'extract_year':
-                df[col] = pd.to_datetime(df[col], errors='coerce').dt.year
-            elif op == 'extract_month':
-                df[col] = pd.to_datetime(df[col], errors='coerce').dt.month
-            elif op == 'extract_day':
-                df[col] = pd.to_datetime(df[col], errors='coerce').dt.day
+                df['ANIO'] = pd.to_datetime(df[col], errors='coerce').dt.year
+            elif op == 'extract_month_name':
+                df['MES'] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%B')
+            elif op == 'extract_trimester':
+                df['TRIMESTRE'] = pd.to_datetime(df[col], errors='coerce').dt.quarter
+            elif op == 'extract_day_name':
+                df['DIA_SEMANA'] = pd.to_datetime(df[col], errors='coerce').dt.strftime('%A')
             elif isinstance(op, dict) and 'concat' in op:
                 df[col] = df[col].astype(str) + str(op['concat'])
+
+    # Ensure all object columns are strings (ODBC-safe)
+    for c in df.columns:
+        if df[c].dtype == 'object':
+            df[c] = df[c].astype(str)
+
     return df
+
+
 
 
 def get_existing_data(conn, dest_table, key_columns):
