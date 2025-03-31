@@ -1,25 +1,30 @@
-import pyodbc
 from etl import etl_process
-from db_credentials import datawarehouse_name, sqlserver_db_config, datawarehouse_db_config
-from sql_queries import sqlserver_queries  # Asegúrate de que tienes las consultas definidas
+from db_credentials import datawarehouse_db_config, sqlserver_db_config
+from sql_queries import sqlserver_queries
 
 def main():
-    """ Ejecuta el proceso ETL para cargar los datos en la base de datos DW_CHINOOK """
+    print("""
+    ****************************************
+    * ETL CON PYODBC - CARGA DW_CHINOOK    *
+    ****************************************
+    """)
+    
     try:
-        # Conexión a la base de datos de destino (DW_CHINOOK)
-        target_cnx = pyodbc.connect(**datawarehouse_db_config)
-        print("Conectado a la base de datos de destino (DW_CHINOOK)")
+        print("[1/3] Configurando entorno ETL...")
+        print("[2/3] Ejecutando proceso... (Ver etl_pyodbc.log para detalles)")
+        
+        etl_process(
+            queries=sqlserver_queries,
+            target_config=datawarehouse_db_config,
+            source_config=sqlserver_db_config
+        )
+        
+        print("[3/3] ¡Proceso completado con éxito!")
+    
     except Exception as e:
-        print(f"Error al conectar a la base de datos de destino: {e}")
-        return
+        print(f"\n[ERROR] {str(e)}\n")
+        print("Revise el archivo etl_pyodbc.log para detalles técnicos")
+        exit(1)
 
-    # Ejecutar el proceso ETL con las consultas definidas
-    etl_process(sqlserver_queries, target_cnx, sqlserver_db_config)
-
-    # Cerrar la conexión de destino
-    target_cnx.close()
-    print("Proceso ETL completado.")
-
-if __name__ == "__main__":
+if __name__ == "_main_":
     main()
-
