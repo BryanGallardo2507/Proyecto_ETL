@@ -1,4 +1,3 @@
-
 import pyodbc
 from etl import etl_process
 from db_credentials import datawarehouse_name, sqlserver_db_config, datawarehouse_db_config

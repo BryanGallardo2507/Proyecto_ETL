@@ -7,7 +7,9 @@ datawarehouse_db_config = {
     'database': datawarehouse_name,
     'user': 'sa',
     'password': '123456',
+    'port':1433,
     'autocommit': True,
+    
 }
 #Conexion a la base de datos OLTP
 sqlserver_db_config = {
@@ -16,5 +18,6 @@ sqlserver_db_config = {
         'database': 'Chinook',
         'user': 'sa',
         'password': '123456',
+        'port':1433,
         'autocommit': True,
     }

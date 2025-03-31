@@ -77,7 +77,7 @@ FROM DBO.TRACK;
 '''
 
 pistas_load = '''
-INSERT INTO DIM_PISTA (
+INSERT INTO DIM_PISTAS (
     PISTAID,
     NOMBRE,
     GENEROID,
@@ -96,7 +96,7 @@ tipo_medio_extract = '''
 '''
 
 tipo_medio_load = '''
-INSERT INTO DIM_MEDIO (
+INSERT INTO DIM_MEDIOTIPO (
     MEDIOID,
     NOMBRE
 ) VALUES (?, ?)
