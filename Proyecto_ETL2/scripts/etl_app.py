@@ -10,13 +10,13 @@ if "query_run" not in st.session_state:
     st.session_state.query_run = False
 
 st.set_page_config(page_title="ETL Chinook → DW_Chinook", layout="centered")
-st.title("🔄 ETL App - Chinook → DW_Chinook")
+st.title(" ETL App - Chinook → DW_Chinook")
 
 # Step 1: Input the SQL query
-st.header("1️⃣ Consulta SQL de origen")
+st.header("Consulta SQL de origen")
 user_query = st.text_area("Escribe la consulta SQL para obtener los datos del sistema OLTP (Chinook):")
 
-if st.button("🔍 Ejecutar Consulta"):
+if st.button("Ejecutar Consulta"):
     if not user_query.strip():
         st.error("ERROR: Por favor ingresa una consulta.")
     else:
@@ -40,7 +40,7 @@ if st.session_state.df is not None and st.session_state.query_run:
     st.write("Vista previa de los datos:")
     st.dataframe(df.head())
 
-    st.header("🧪 Transformaciones por columna")
+    st.header("Transformaciones por columna")
 
     selected_columns = st.multiselect("Selecciona las columnas a transformar:", df.columns.tolist())
     transformations = {}
@@ -65,7 +65,7 @@ if st.session_state.df is not None and st.session_state.query_run:
                     processed_ops.append(op)
             transformations[col] = processed_ops
 
-    st.header("🛠️ Configurar y Ejecutar ETL")
+    st.header("Configurar y Ejecutar ETL")
     with st.form("etl_form"):
         dest_table = st.text_input("Nombre exacto de la tabla destino en DW_CHINOOK:")
         key_columns = st.multiselect("Selecciona las columnas clave para evitar duplicados:", df.columns.tolist())

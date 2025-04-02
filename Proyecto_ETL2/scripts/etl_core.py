@@ -3,9 +3,8 @@ import pandas as pd
 from datetime import datetime
 import hashlib
 
-# --------------------------------------
-# Database Connection
-# --------------------------------------
+
+# Conexion a la Base de Datos
 def create_connection(config):
     conn_str = (
         f"DRIVER={{{config['driver']}}};"
@@ -17,9 +16,8 @@ def create_connection(config):
     )
     return pyodbc.connect(conn_str, autocommit=config['autocommit'])
 
-# --------------------------------------
-# Data Extraction
-# --------------------------------------
+
+# Extraccion de Datos
 def extract_data(conn, query):
     try:
         df = pd.read_sql(query, conn)
@@ -27,9 +25,8 @@ def extract_data(conn, query):
     except Exception as e:
         raise Exception(f"Error during extraction: {e}")
 
-# --------------------------------------
-# Transformations
-# --------------------------------------
+
+# Transformacion de los Datos
 def apply_transformations(df, transformations):
     for col, ops in transformations.items():
         for op in ops:
@@ -48,23 +45,21 @@ def apply_transformations(df, transformations):
             elif isinstance(op, dict) and 'concat' in op:
                 df[col] = df[col].astype(str) + str(op['concat'])
 
-    # Ensure object columns are safe for SQL insert
+    # Revisa si las columnas de los objetos sean seguras para la insercion
     for c in df.columns:
         if df[c].dtype == 'object':
             df[c] = df[c].astype(str)
 
     return df
 
-# --------------------------------------
-# Row Hashing for Deduplication
-# --------------------------------------
+
+# Hasing de filas para eliminar datos duplicados y reducir el almacenamiento(deduplicacion)
 def generate_row_hash(row, cols):
     row_string = '|'.join(str(row[col]) for col in cols)
     return hashlib.sha256(row_string.encode()).hexdigest()
 
-# --------------------------------------
-# Get Existing Records (based on keys)
-# --------------------------------------
+
+# Obtener datos existentes(segun keys)
 def get_existing_data(conn, dest_table, key_columns):
     try:
         query = f"SELECT {', '.join(key_columns)} FROM {dest_table}"
@@ -72,29 +67,27 @@ def get_existing_data(conn, dest_table, key_columns):
     except Exception as e:
         raise Exception(f"Error fetching existing records: {e}")
 
-# --------------------------------------
-# Data Load with Hash-Based Deduplication
-# --------------------------------------
+# Carga de datos con deduplicacion basada en hash
 def load_data(conn, dest_table, df, key_columns):
     cursor = conn.cursor()
     try:
-        # Step 1: Create ROW_HASH column for input data
+        # Paso 1: Crear la columna ROW_HASH para los datos de entrada
         df['ROW_HASH'] = df.apply(lambda row: generate_row_hash(row, key_columns), axis=1)
 
-        # Step 2: Get existing rows (only key columns)
+        # Paso 2: Obtener filas existentes(solo las columnas claves)
         existing = get_existing_data(conn, dest_table, key_columns)
 
         if not existing.empty:
-            # Step 3: Generate ROW_HASH for existing records
+            # Paso 3: Generar ROW_HASH para los datos existentes
             existing['ROW_HASH'] = existing.apply(lambda row: generate_row_hash(row, key_columns), axis=1)
 
-            # Step 4: Drop duplicates
+            # Paso 4: Eliminar duplicados
             df = df[~df['ROW_HASH'].isin(existing['ROW_HASH'])]
 
         if df.empty:
-            return 0  # No new rows to insert
+            return 0  # no hay nuevas filas para insertar
 
-        # Step 5: Remove ROW_HASH before insert
+        # Paso 5: Remover ROW_HASH antes de la insercion
         df_to_insert = df.drop(columns=['ROW_HASH'])
 
         placeholders = ", ".join("?" * len(df_to_insert.columns))
