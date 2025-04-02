@@ -2,9 +2,9 @@
 
 source_config = {
     'driver': 'ODBC Driver 17 for SQL Server',
-    'server': 'DESKTOP-HBC5E0J',
+    'server': 'PC_RICARDO\SQLEXPRESS',
     'database': 'Chinook',
-    'user': 'UserChinook',
+    'user': 'sa',
     'password': '123456',
     'port': 1433,
     'autocommit': True,
@@ -12,9 +12,9 @@ source_config = {
 
 target_config = {
     'driver': 'ODBC Driver 17 for SQL Server',
-    'server': 'DESKTOP-HBC5E0J',
+    'server': 'PC_RICARDO\SQLEXPRESS',
     'database': 'DW_Chinook',
-    'user': 'UserChinook',
+    'user': 'sa',
     'password': '123456',
     'port': 1433,
     'autocommit': True,
