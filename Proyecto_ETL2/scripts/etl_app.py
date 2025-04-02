@@ -10,15 +10,15 @@ if "query_run" not in st.session_state:
     st.session_state.query_run = False
 
 st.set_page_config(page_title="ETL Chinook → DW_Chinook", layout="centered")
-st.title("🔄 ETL App - Chinook → DW_Chinook")
+st.title(" ETL App - Chinook → DW_Chinook")
 
 # Step 1: Input the SQL query
-st.header("1️⃣ Consulta SQL de origen")
+st.header("Consulta SQL de origen")
 user_query = st.text_area("Escribe la consulta SQL para obtener los datos del sistema OLTP (Chinook):")
 
-if st.button("🔍 Ejecutar Consulta"):
+if st.button("Ejecutar Consulta"):
     if not user_query.strip():
-        st.error("❌ Por favor ingresa una consulta.")
+        st.error("ERROR: Por favor ingresa una consulta.")
     else:
         try:
             source_conn = create_connection(source_config)
@@ -27,9 +27,9 @@ if st.button("🔍 Ejecutar Consulta"):
 
             st.session_state.df = df  # Save result
             st.session_state.query_run = True
-            st.success("✅ Consulta ejecutada correctamente.")
+            st.success("Consulta ejecutada correctamente.")
         except Exception as e:
-            st.error(f"❌ Error al ejecutar la consulta: {e}")
+            st.error(f"ERROR al ejecutar la consulta: {e}")
             st.session_state.df = None
             st.session_state.query_run = False
 
@@ -40,13 +40,13 @@ if st.session_state.df is not None and st.session_state.query_run:
     st.write("Vista previa de los datos:")
     st.dataframe(df.head())
 
-    st.header("🧪 Transformaciones por columna")
+    st.header("Transformaciones por columna")
 
     selected_columns = st.multiselect("Selecciona las columnas a transformar:", df.columns.tolist())
     transformations = {}
 
     for col in selected_columns:
-        with st.expander(f"⚙️ Transformaciones para '{col}'"):
+        with st.expander(f"Transformaciones para '{col}'"):
             ops = st.multiselect(
                 f"Operaciones para {col}",
                 options=[
@@ -65,15 +65,15 @@ if st.session_state.df is not None and st.session_state.query_run:
                     processed_ops.append(op)
             transformations[col] = processed_ops
 
-    st.header("🛠️ Configurar y Ejecutar ETL")
+    st.header("Configurar y Ejecutar ETL")
     with st.form("etl_form"):
         dest_table = st.text_input("Nombre exacto de la tabla destino en DW_CHINOOK:")
         key_columns = st.multiselect("Selecciona las columnas clave para evitar duplicados:", df.columns.tolist())
-        submitted = st.form_submit_button("🚀 Ejecutar ETL")
+        submitted = st.form_submit_button("Ejecutar ETL")
 
     if submitted:
         if not dest_table or not key_columns:
-            st.error("❌ Debes ingresar el nombre de la tabla destino y al menos una columna clave.")
+            st.error("ERROR: Debes ingresar el nombre de la tabla destino y al menos una columna clave.")
         else:
             try:
                 df_transformed = apply_transformations(df.copy(), transformations)
@@ -81,8 +81,8 @@ if st.session_state.df is not None and st.session_state.query_run:
                 inserted = load_data(target_conn, dest_table, df_transformed, key_columns)
                 target_conn.close()
 
-                st.success(f"✅ ETL completado. {inserted} registros insertados.")
+                st.success(f"ETL completado. {inserted} registros insertados.")
                 if inserted == 0:
-                    st.info("ℹ️ No se insertaron nuevos registros (duplicados existentes).")
+                    st.info("ADVERTENCIA: No se insertaron nuevos registros (duplicados existentes).")
             except Exception as e:
-                st.error(f"❌ Error en el ETL: {e}")
+                st.error(f"ERROR en el ETL: {e}")

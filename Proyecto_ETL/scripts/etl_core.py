@@ -59,7 +59,7 @@ def generate_row_hash(row, cols):
     return hashlib.sha256(row_string.encode()).hexdigest()
 
 
-# Obtener datos existentes(segun keys)
+# Obtener datos existentes(segun columnas )
 def get_existing_data(conn, dest_table, key_columns):
     try:
         query = f"SELECT {', '.join(key_columns)} FROM {dest_table}"

@@ -1,5 +1,4 @@
-# db_credentials.py
-
+# Configuración de la conexión a la base de datos
 source_config = {
     'driver': 'ODBC Driver 17 for SQL Server',
     'server': 'PC_RICARDO\SQLEXPRESS',
